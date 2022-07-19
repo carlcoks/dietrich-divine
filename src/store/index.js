@@ -1,18 +1,24 @@
-import api from '../../api/products.js';
-import Vue from 'vue';
-import Vuex from 'vuex';
+
+import Vue from "vue";
+import Vuex from "vuex";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    cart: [],
   },
   mutations: {
-  },
-  actions: {
-    getProductsList(ctx, data) {
-      return api.getProductsList();
+    addToCart(state, payload) {
+      state.cart.unshift(payload);
     },
   },
-  modules: {
-  }
-})
+  getters: {
+    getCart: (state) => state.cart,
+    getTotalCartPrice: (state) =>
+      state.cart.reduce((sum, item) => {
+        sum += item.price * item.amount;
+        return sum;
+      }, 0),
+  },
+  modules: {},
+});
